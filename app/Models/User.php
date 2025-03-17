@@ -58,4 +58,12 @@ class User extends Authenticatable
     {
         return $this->hasManyThrough(Product::class, Category::class);
     }
+    public function roles ()
+    {
+        return $this->belongsToMany(Role::class);
+    }
+    public function getIsAdminAtrribute()
+    {
+        return $this->roles->contains('title', 'Admin');
+    }
 }

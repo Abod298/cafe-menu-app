@@ -1,6 +1,6 @@
 <template>
     <div class="p-4 max-w-5xl mx-auto">
-        <h2 class="text-2xl font-bold mb-4">Products</h2>
+        <h2 class="text-2xl font-bold mb-4">Ürünler</h2>
 
         <!-- Search Input -->
         <Input type="text" v-model="searchQuery" placeholder="Arama yap..." class="mb-4" />

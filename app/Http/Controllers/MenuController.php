@@ -11,8 +11,9 @@ class MenuController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index($slug)
+    public function index(Request $request, $slug)
     {
+        $request->visit();
         $user = User::where('slug', $slug)->firstOrFail();
 
         $categories = $user->categories()
@@ -38,7 +39,7 @@ class MenuController extends Controller
                 ];
             });
         return inertia('Welcome' , [
-            'categories' => $categories
+            'categories' => $categories,
         ]);
     }
 }

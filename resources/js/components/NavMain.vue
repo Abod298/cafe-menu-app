@@ -3,6 +3,12 @@ import { SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, Sideba
 import { type NavItem, type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/vue3';
 
+
+
+const { can } = usePage().props as {
+  can: Record<string, boolean>;
+};
+
 defineProps<{
     items: NavItem[];
 }>();
@@ -15,7 +21,7 @@ const page = usePage<SharedData>();
         <SidebarGroupLabel>Platform</SidebarGroupLabel>
         <SidebarMenu>
             <SidebarMenuItem v-for="item in items" :key="item.title">
-                <SidebarMenuButton as-child :is-active="item.href === page.url">
+                <SidebarMenuButton v-if="can[`access-${item.can}`]" as-child :is-active="item.href === page.url">
                     <Link :href="item.href">
                         <component :is="item.icon" />
                         <span>{{ item.title }}</span>

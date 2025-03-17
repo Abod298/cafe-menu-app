@@ -2,13 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Symfony\Component\HttpFoundation\Response;
 
+use Gate;
 class CategoryController extends Controller
 {
+    public function __construct(){
+        abort_if(Gate::denies('category_management_access'),
+        Response::HTTP_FORBIDDEN, '403 Forbidden');
+    }
     public function index()
     {
         $user = auth()->user();
@@ -32,7 +39,7 @@ class CategoryController extends Controller
     {
         return Inertia::render('categories/Create');
     }
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
         $data = $request->all();
         $data['user_id'] = auth()->id();
@@ -70,12 +77,14 @@ class CategoryController extends Controller
     }
     public function edit(Category $category)
     {
+        Gate::authorize('update', $category);
         return Inertia::render('categories/Edit', [
             'category' => $category,
         ]);
     }
-    public function update(Request $request, Category $category)
+    public function update(CategoryRequest $request, Category $category)
     {
+        Gate::authorize('update', $category);
         $category->update($request->all());
         if ($request->input('images')) {
             $category->clearMediaCollection('images');
@@ -89,6 +98,7 @@ class CategoryController extends Controller
     }
     public function destroy(Category $category)
     {
+        Gate::authorize('delete', $category);
         $category->delete();
         return redirect()->route('categories.index')->with('success', 'Kategori Silindi.');
     }

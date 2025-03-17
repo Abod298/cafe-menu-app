@@ -1,6 +1,6 @@
 <template>
     <div class="min-h-screen p-6 flex flex-col items-center">
-        <h1 class="text-3xl font-bold mb-6">Menü</h1>
+        <h1 class="text-3xl font-bold mb-6">Menü {{ visitCount }}</h1>
         <div class="w-full max-w-3xl">
             <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
 
@@ -43,6 +43,7 @@ import { ref } from "vue";
 
 const props = defineProps({
     categories: Object,
+    visitCount:Number,
 });
 
 

@@ -28,11 +28,14 @@ defineProps(['categories']);
                 focus-visible:outline-2 focus-visible:outline-offset-2
                  focus-visible:outline-indigo-600">Katagori Ekle</Link>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6
+            <div v-if="categories.length" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6
                         min-h-screen
                         rounded-xl border border-sidebar-border/70
                         dark:border-sidebar-border">
                 <CardComponent v-for="category in categories" :key="category.id" :category="category" />
+            </div>
+            <div v-else class="flex justify-center items-center">
+                <p>Kategori Yok!</p>
             </div>
         </div>
     </AppLayout>

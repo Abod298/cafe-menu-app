@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -45,11 +46,13 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+        $userRole = Role::where('title', Role::DEFAULT_ROLE)->first();
 
+        if ($userRole) {
+            $user->roles()->attach($userRole->id);
+        }
         event(new Registered($user));
 
-        Auth::login($user);
-
-        return to_route('dashboard');
+        return redirect()->route('users.index')->with('success' , 'User Created Successfuly !');
     }
 }

@@ -5,29 +5,49 @@ import NavUser from '@/components/NavUser.vue';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/vue3';
-import { ScanLine, ListCollapse, LayoutGrid } from 'lucide-vue-next';
+import { ScanLine, ListCollapse, LayoutGrid , UsersRound, Ban , Fingerprint} from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
 
 const mainNavItems: NavItem[] = [
     {
         title: 'Kontrol Paneli',
         href: '/dashboard',
+        can: 'dashboard',
         icon: LayoutGrid,
     },
     {
         title: 'Kategoriler',
         href: '/categories',
+        can: 'category',
         icon: ListCollapse,
     },
     {
         title: 'Ürünler',
         href: '/products',
+        can: 'product',
         icon: ScanLine,
     },
 ];
 
 const footerNavItems: NavItem[] = [
-
+        {
+        title: 'Users',
+        href: '/users',
+        can: 'user',
+        icon: UsersRound,
+    },
+    {
+        title: 'Roles',
+        href: '/roles',
+        can: 'role',
+        icon: Fingerprint,
+    },
+    {
+        title: 'Permissions',
+        href: '/permissions',
+        can: 'permission',
+        icon: Ban,
+    },
 ];
 </script>
 

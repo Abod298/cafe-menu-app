@@ -6,6 +6,7 @@ use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
+use Illuminate\Support\Facades\Gate;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -26,6 +27,26 @@ class HandleInertiaRequests extends Middleware
     public function version(Request $request): ?string
     {
         return parent::version($request);
+    }
+    protected function getUserPermissions(Request $request)
+    {
+        // Retrieve all permissions from the Permission model
+        $permissions = \App\Models\Permission::all();
+
+        // Initialize the result array
+        $userPermissions = [
+            'access-dashboard' => true,
+        ];
+
+        // Loop through each permission from the database
+        foreach ($permissions as $permission) {
+            // Dynamically generate the key for each permission (e.g., access-dashboard, access-users, etc.)
+            $permissionKey = 'access-' . str_replace('_management_access', '', $permission->title);
+
+            // Check if the user has permission for this specific permission key
+            $userPermissions[$permissionKey] = Gate::allows($permission->title);
+        }
+        return $userPermissions;
     }
 
     /**
@@ -54,6 +75,7 @@ class HandleInertiaRequests extends Middleware
                 'success' => fn() => $request->session()->get('success'),
                 'error' => fn() => $request->session()->get('error'),
             ],
+            'can' => $this->getUserPermissions($request),
         ];
     }
 }

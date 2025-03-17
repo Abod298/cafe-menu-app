@@ -2,14 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-
+use Symfony\Component\HttpFoundation\Response;
+use Gate;
 class ProductController extends Controller
 {
+    public function __construct(){
+        abort_if(Gate::denies('product_management_access'),
+        Response::HTTP_FORBIDDEN, '403 Forbidden');
+    }
     public function index()
     {
+
         $user = auth()->user();
         $products = $user->products()->with('media')->get()->map(function ($product) {
             return [
@@ -32,13 +39,9 @@ class ProductController extends Controller
             'categories' => auth()->user()->categories,
         ]);
     }
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        $request->validate([
-            'name' => 'required',
-            'price' => 'required',
-            'category_id' => 'required|numeric|id_exists:categories',
-        ]);
+
         $product = Product::create($request->all());
         if ($request->input('images')) {
             foreach ($request->file('images') as $image) {
@@ -58,18 +61,15 @@ class ProductController extends Controller
     }
     public function edit(Product $product)
     {
+        Gate::authorize('update', $product);
         return inertia('product/Edit', [
             'product' => $product->load('category'),
             'categories' => auth()->user()->categories,
         ]);
     }
-    public function update(Request $request, Product $product)
+    public function update(ProductRequest $request, Product $product)
     {
-        $request->validate([
-            'name' => 'required',
-            'price' => 'required',
-            'category_id' => 'required',
-        ]);
+        Gate::authorize('update', $product);
         $product->update($request->all());
         if ($request->input('images')) {
             $product->clearMediaCollection('images');
@@ -83,6 +83,7 @@ class ProductController extends Controller
     }
     public function destroy(Product $product)
     {
+        Gate::authorize('delete', $product);
         $product->delete();
         return redirect()->route('products.index')->with('success', 'Ürün Silindi.');
     }
