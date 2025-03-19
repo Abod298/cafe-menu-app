@@ -1,6 +1,16 @@
 <template>
     <div class="min-h-screen p-6 flex flex-col items-center">
-        <h1 class="text-3xl font-bold mb-6">Menü {{ visitCount }}</h1>
+        <div class="w-full flex justify-around px-12">
+            <div><h1 class="  text-3xl font-bold mb-6">Menü</h1></div>
+
+            <div>
+                <Link :href="route('login')" class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm
+                font-semibold text-white shadow-xs hover:bg-indigo-500
+                focus-visible:outline-2 focus-visible:outline-offset-2
+                 focus-visible:outline-indigo-600">Giriş yap</Link>
+            </div>
+        </div>
+
         <div class="w-full max-w-3xl">
             <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
 
@@ -40,6 +50,7 @@ import PlaceholderPattern from '@/components/PlaceholderPattern.vue';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { ref } from "vue";
+import { Link } from '@inertiajs/vue3';
 
 const props = defineProps({
     categories: Object,

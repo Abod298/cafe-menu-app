@@ -9,7 +9,9 @@ import { Icon } from '@iconify/vue';
 import { router } from '@inertiajs/vue3';
 import { route } from 'ziggy-js';
 import { BarChart } from '@/components/ui/chart-bar'
-import { computed } from 'vue'
+import { Link } from '@inertiajs/vue3'
+import QrcodeVue from 'qrcode.vue';
+
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -28,8 +30,10 @@ const handleNewCategory = () => {
 const handleRefresh = () => {
     window.location.reload();
 };
+
 defineProps<{
-    visits: Record<string, number>
+    visits: Record<string, number>,
+    url:string,
 }>()
 
 
@@ -41,8 +45,8 @@ defineProps<{
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-            <div class="grid auto-rows-min gap-4 md:grid-cols-3">
-                <!-- Visitor Count Card -->
+            <div class="grid auto-rows-min gap-4 md:grid-cols-4">
+
                 <Card class="flex flex-col justify-between">
                     <CardHeader>
                         <CardTitle class="text-lg">Toplam Ziyaretçi Sayısı</CardTitle>
@@ -53,7 +57,6 @@ defineProps<{
                     </CardContent>
                 </Card>
 
-                <!-- Recent Activity Card -->
                 <Card>
                     <CardHeader>
                         <CardTitle class="text-lg">Bugünkü ziyaretçi sayısı</CardTitle>
@@ -70,7 +73,7 @@ defineProps<{
                         </div>
                     </CardContent>
                 </Card>
-                <!-- Quick Actions Card -->
+
                 <Card>
                     <CardHeader>
                         <CardTitle class="text-lg">Hızlı İşlemler</CardTitle>
@@ -89,6 +92,17 @@ defineProps<{
                             <Icon icon="mdi:refresh" class="h-4 w-4" />
                             Yenile
                         </Button>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader>
+                        <CardTitle class="text-lg">Kare Kodunuz</CardTitle>
+                        <CardDescription>Sağ tıkla indirebilirsiniz</CardDescription>
+                    </CardHeader>
+                    <CardContent class="flex flex-col items-center">
+                        <qrcode-vue :value="url" :size="150" />
+                        <Link :href="url" 
+                        class="text-indigo-400 underline "> {{ url }}</Link>
                     </CardContent>
                 </Card>
             </div>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -16,6 +17,7 @@ class DashboardController extends Controller
                                     ->paths(auth()->user()->slug)->count(),
                 'thisMonth' => $this->getMonthVisits(),
             ],
+            'url' => $this->getUrl(),
         ]);
     }
     private function getMonthVisits()
@@ -34,5 +36,11 @@ class DashboardController extends Controller
         }
 
         return $visitCounts;
+    }
+    private function getUrl(){
+        $path = User::findOrFail(auth()->id())->slug;
+        $appUrl = config('app.url');
+        $fullUrl = $appUrl . '/' . $path;
+        return $fullUrl;
     }
 }
